@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% import "_forms.html" as forms %}
+
+{% block content %}
+	<form action="." method="post">
+	{{ forms.render(form) }}
+		<div class="actions">
+		  <input type="submit" class="btn primary" value="save">
+		  <a href="{{ url_for("polls.detail", poll_id=poll.id) }}" class="btn secondary">Cancel</a>
+		</div>
+	</form>
+{% endblock %}

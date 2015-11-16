@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% for poll in polls %}
+      <h2><a href="{{ url_for('polls.detail', poll_id=poll.id) }}">{{ poll.title }}</a></h2>
+      <p>{{ poll.description|truncate(100) }}</p>
+      <p>
+        {{ poll.created_at.strftime('%H:%M %Y-%m-%d') }} |
+        {% with total=poll.comments|length %}
+            {{ total }} comment {%- if total > 1 %}s{%- endif -%}
+        {% endwith %}
+      </p>
+    {% endfor %}
+{% endblock %}

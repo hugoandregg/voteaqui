@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% import "_forms.html" as forms %}
+
+{% block page_header %}
+  <div class="page-header">
+    <h1>{{ poll.title }}</h1>
+  </div>
+{% endblock %}
+
+{% block content %}
+  <p>{{ poll.description }}<p>
+  <p>Data de validade: {{ poll.expiration_date }}</p> | <a href="/delete/{{ poll.id }}">Deletar Votação</a>
+  <p>{{ poll.created_at.strftime('%H:%M %Y-%m-%d') }} | <a href="/create/{{ poll.id }}">Adicionar escolha</a></p>
+  {% if poll.choices %}
+    <hr>
+    <h2>Escolhas</h2>
+  	{% for choice in poll.choices %}
+  		<p>{{ choice.name }} - {{ choice.description }} - {{ choice.votes }}</p>
+  	{% endfor %}
+  {% endif %}
+  <hr>
+  <h2>Comentários</h2>
+  {% if poll.comments %}
+    {% for comment in poll.comments %}
+       <p>{{ comment.body }}</p>
+       <!-- <small>on  comment.created_at.strftime('%H:%M %Y-%m-%d') </small></p> -->
+    {% endfor %}
+  {% endif %}
+  <hr>
+  <form action="." method="post">
+  {{ forms.render(form) }}
+    <div class="actions">
+      <input type="submit" class="btn primary" value="Comentar">
+    </div>
+  </form>
+{% endblock %}
