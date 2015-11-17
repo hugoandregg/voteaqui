@@ -9,8 +9,6 @@
     <div class="input">
       {% if field.name == "body" %}
         {{ field(rows=10, cols=40) }}
-      {% elif field.name == "expiration_date" %}
-        {{ field() }}
       {% else %}
         {{ field() }}
       {% endif %}

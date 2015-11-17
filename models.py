@@ -2,11 +2,37 @@ import datetime
 from flask import url_for
 from voteaqui import db
 
-class Comment(db.EmbeddedDocument):
+class Comment(db.Document):
 	body = db.StringField(required=True)
+	author = db.ReferenceField('User')
 
 
-class Choice(db.EmbeddedDocument):
+class User(db.Document):
+	name = db.StringField(required=True)
+	email = db.EmailField(required=True)
+	password = db.StringField(required=True)
+	active = db.BooleanField(default=True)
+	polls = db.ListField(db.ReferenceField('Poll'))
+	comments = db.ListField(db.ReferenceField('Comment'))
+
+	def is_active(self):
+		return self.active
+
+	def get_id(self):
+		return self.id
+
+	def is_authenticated(self):
+		"""Return True if the user is authenticated."""
+		return self.authenticated
+
+	def is_anonymous(self):
+		"""False, as anonymous users aren't supported."""
+		return False
+
+	def __unicode__(self):
+		return self.name
+
+class Choice(db.Document):
 	name = db.StringField(required=True, max_length=50)
 	description = db.StringField()
 	votes = db.IntField(default=0)
@@ -24,8 +50,9 @@ class Poll(db.Document):
 	expiration_date = db.DateTimeField()
 	title = db.StringField(required=True, max_length=30)
 	description = db.StringField()
-	choices = db.ListField(db.EmbeddedDocumentField(Choice))
-	comments = db.ListField(db.EmbeddedDocumentField(Comment))
+	author = db.ReferenceField(User)
+	choices = db.ListField(db.ReferenceField(Choice))
+	comments = db.ListField(db.ReferenceField(Comment))
 
 	def __unicode__(self):
 		return self.title
@@ -34,11 +61,3 @@ class Poll(db.Document):
 		'indexes': ['-created_at', '-id'],
 		'ordering': ['-created_at']
 	} 
-
-
-class User(db.Document):
-	email = db.EmailField(required=True)
-	password = db.StringField(required=True)
-	active = db.BooleanField(default=True)
-	polls = db.ListField(db.ReferenceField(Poll))
-	comments = db.ListField(db.EmbeddedDocumentField(Comment))

@@ -21,7 +21,9 @@ login_manager.init_app(app)
 
 def register_blueprints(app):
 	from voteaqui.views import polls
+	from auth import auth_flask_login
 	app.register_blueprint(polls)
+	app.register_blueprint(auth_flask_login)
 
 register_blueprints(app)
 

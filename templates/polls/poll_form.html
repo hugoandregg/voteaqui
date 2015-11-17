@@ -4,6 +4,8 @@
 {% block content %}
 	<form action="." method="post">
 	{{ forms.render(form) }}
+	<b>Data de validade</b><br />
+	<input type="date" name="expiration_date" />
 		<div class="actions">
 		  <input type="submit" class="btn primary" value="save">
 		  <a href="{{ url_for("polls.list") }}" class="btn secondary">Cancel</a>
