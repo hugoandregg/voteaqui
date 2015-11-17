@@ -31,13 +31,11 @@ class DetailView(MethodView):
 		user = User.objects.get(id=current_user.id)
 
 		can_vote = True
-		'''
-		if poll.choices:
-			for choice in poll.choices:
+		for choice in poll.choices:
+			if choice.users != None:
 				for choice_user in choice.users:
 					if choice_user == user:
 						can_vote = False
-		'''
 
 		context = {
 			"poll": poll,
