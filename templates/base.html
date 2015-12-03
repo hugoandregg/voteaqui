@@ -1,39 +1,60 @@
-<!DOCTYPE html>
+
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <title>VoteAqui</title>
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+    {% block links %}{% endblock %}
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     <style>.content {padding-top: 80px;}</style>
+    <style>
+       #alor {
+          color:#FFF;
+       }
+      #alor:hover,a:hover {text-decoration: none;font-weight:default;color:e6e6e6;}
+    </style> 
   </head>
 
   <body>
-
-    {%- block topbar -%}
-    <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <h2>
-              <a href="/" class="brand">VoteAqui</a>
-          </h2>
+  <div class="wrapper">
+      {%- block topbar -%}
+      <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+          <div class="navbar-header">
+            <h2><a id="alor" href="/" class="brand">VoteAqui</a></h2>
+          </div>
+          <div class="navbar-collapse">
+            {% if current_user.is_authenticated %}
+              <a class="navbar-brand navbar-right" href="/logout">Logout</a>
+            {% else %}
+              <a class="navbar-brand navbar-right" href="/register">Registrar</a>
+            {% endif %}
+          </div><!--/.nav-collapse -->
         </div>
-        <div class="navbar-collapse">
-          {% if current_user.is_authenticated %}
-            <a class="navbar-brand navbar-right" href="/logout">Logout</a>
-          {% else %}
-            <a class="navbar-brand navbar-right" href="/register">Registrar</a>
-          {% endif %}
-        </div><!--/.nav-collapse -->
-      </div>
-    </nav>
-    {%- endblock -%}
+      </nav>
+      {%- endblock -%}
 
-    <div class="container">
-      <div class="content">
-        {% block page_header %}{% endblock %}
-        {% block content %}{% endblock %}
+      <div class="container">
+        <div class="content">
+          {% block page_header %}{% endblock %}
+          {% block content %}{% endblock %}
+        </div>
       </div>
+      {% block js_footer %}{% endblock %}
     </div>
-    {% block js_footer %}{% endblock %}
+
+    <!--
+    <div class="push"> </div>
+    <div > </div>
+      <footer
+      class="footer" > 
+        <div class="container"> 
+          <p style="margin-top:8px;color: #000; text-align:center;font-size:9px" class="text-muted credit"> Projeto NoSQL VoteAqui </p>
+          <p style="color: #000; text-align:center; font-size:8px" class="text-muted credit"> 2015. Nenhum direito reservado. #TáNoGit </p>
+        </div>
+      </footer>
+      -->
   </body>
 </html>

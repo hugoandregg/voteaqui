@@ -3,9 +3,7 @@ from flask.ext.mongoengine import MongoEngine, MongoEngineSessionInterface
 from flask.ext.login import LoginManager
 from flask.ext.bcrypt import Bcrypt
 
-app = Flask(__name__)
-
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/templates/static')
 app.config["MONGODB_SETTINGS"] = {'DB': "voteaqui"}
 app.config["SECRET_KEY"] = "KeepThisS3cr3t"
 

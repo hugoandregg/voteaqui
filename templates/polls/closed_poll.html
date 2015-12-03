@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% import "_forms.html" as forms %}
+
+{% block links %}
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='chart.css') }}">
+{% endblock %}
+
+{% block content %}
+	<p><b>Descrição:</b> {{ poll.description }}<p>
+  	<p><b>Autor:</b> {{ poll.author.name }}</p>
+  	<p><b>Data de validade:</b> {{ poll.expiration_date }}</p>
+  	<p>{{ poll.created_at.strftime('%H:%M %Y-%m-%d') }}</p>
+
+  	{% if poll.author == current_user %}
+  		<a class="btn btn-danger" href="/delete/{{ poll.id }}">Deletar Votação</a> | <a href="/enable/{{ poll.id }}" class="btn btn-default">Ativar Votação</a>
+  	{% endif %}
+
+  	<hr>
+
+  	<div class="row row-centered">
+  		<div class="col-xs-6 col-centered">
+			<div class="row row-centered"><canvas id="myChart" width="300" height="300"></canvas></div>
+		</div>
+	</div>
+
+	<hr>
+	<h2>Comentários</h2>
+	{% if poll.comments %}
+	{% for comment in poll.comments %}
+	  <h4>{{ comment.author }}</h4>
+	  <p>{{ comment.body }}{% if comment.author == current_user %} - <a href="/delete/{{poll.id}}/{{comment.id}}">excluir</a>{% endif %}</p>
+	{% endfor %}
+	{% endif %}
+	<hr>
+	<form action="." method="post">
+	{{ forms.render(form) }}
+	<div class="actions">
+	  <input type="submit" class="btn primary" value="Comentar">
+	</div>
+	</form>
+{% endblock %}
+{% block js_footer %}
+	<script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+
+	<script type="text/javascript">
+		var choices = {{ poll.choices|tojson }};
+		console.log(choices);
+
+		var options = {
+		    //Boolean - Whether we should show a stroke on each segment
+		    segmentShowStroke : true,
+
+		    //String - The colour of each segment stroke
+		    segmentStrokeColor : "#fff",
+
+		    //Number - The width of each segment stroke
+		    segmentStrokeWidth : 2,
+
+		    //Number - The percentage of the chart that we cut out of the middle
+		    percentageInnerCutout : 50, // This is 0 for Pie charts
+
+		    //Number - Amount of animation steps
+		    animationSteps : 100,
+
+		    //String - Animation easing effect
+		    animationEasing : "easeOutBounce",
+
+		    //Boolean - Whether we animate the rotation of the Doughnut
+		    animateRotate : true,
+
+		    //Boolean - Whether we animate scaling the Doughnut from the centre
+		    animateScale : false,		   
+		}
+
+		var data = [];
+		var colors = ["#0000ff", "#0000e6", "#0000cc", "#0000b3", "#000099"];
+		for (var i=0; i < choices.length; i++) {
+			data.push({
+				value: choices[i].votes,
+				color: colors[i%5],
+        		highlight: "#9999ff",
+        		label: choices[i].name
+			});
+		}
+
+
+		var ctx = document.getElementById("myChart").getContext("2d");
+		var myDoughnutChart = new Chart(ctx).Doughnut(data,options);
+	</script>
+{% endblock js_footer %}

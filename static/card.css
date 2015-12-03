@@ -1,0 +1,28 @@
+.card {
+	border-radius: 10px 10px 10px 10px;
+	-moz-border-radius: 10px 10px 10px 10px;
+	-webkit-border-radius: 10px 10px 10px 10px;
+	border: 0px solid #000000;
+
+	-webkit-box-shadow: 5px 5px 5px 0px #B6B6B6;
+	-moz-box-shadow: 5px 5px 5px 0px #B6B6B6;
+	box-shadow: 5px 5px 5px 0px #B6B6B6;
+
+	padding-bottom: 5px;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.card-header {
+	border-radius: 10px 10px 0px 0px;
+	-moz-border-radius: 10px 10px 0px 0px;
+	-webkit-border-radius: 10px 10px 0px 0px;
+	border: 0px solid #000000;
+	padding-bottom: 4px;
+	background-color: #d9d9d9;
+}
+
+.card a {
+	color: #0275d8;
+	cursor: auto;
+	margin: 12px;
+}

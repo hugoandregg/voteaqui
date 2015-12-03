@@ -1,15 +1,52 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {% for poll in polls %}
-      <h2><a href="{{ url_for('polls.detail', poll_id=poll.id) }}">{{ poll.title }}</a></h2>
-      <p>{{ poll.description|truncate(100) }}</p>
-      <p>
-        {{ poll.created_at.strftime('%H:%M %Y-%m-%d') }} |
-        {% with total=poll.comments|length %}
-            {{ total }} comment {%- if total > 1 %}s{%- endif -%}
-        {% endwith %}
-      </p>
-    {% endfor %}
-    <a href="/create">Criar votação</a>
+  <div role="tabpanel">
+    <ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"><a href="#open" aria-controls="open" role="tab" data-toggle="tab">Open</a></li>
+      <li role="presentation"><a href="#closed" aria-controls="closed" role="tab" data-toggle="tab">Closed</a></li>
+    </ul>
+  </div>
+  <div class="tab-content" style="padding: 10px;">
+    <div role="tabpanel" class="tab-pane active" id="open">
+      {% for poll in polls %}
+        <div class="panel panel-default poll-item linkable" style="background-color: #337AB7; color: white;" data-href="{{ url_for('polls.detail', poll_id=poll.id) }}">
+          <div class="panel-body">
+            <h3 class="panel-title poll-title">{{ poll.title }}</h3>
+             <p class="poll-metadata">
+              Created by <strong>{{ poll.author }}</strong> at {{ poll.created_at.strftime('%H:%M %Y-%m-%d') }}.
+            </p>
+            <div class="poll-description">
+              {{ poll.description|safe }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      <a href="/create" style="float:left; margin-top: 5px;" class="btn btn-default">Nova enquete</a> 
+    </div>
+    <div role="tabpanel" class="tab-pane" id="closed">
+      {% for poll in closed_polls %}
+        <div class="panel panel-default poll-item linkable" style="background-color: #B6B6B6; color: white;" data-href="{{ url_for('polls.closed', poll_id=poll.id) }}">
+          <div class="panel-body">
+            <h3 class="panel-title poll-title">{{ poll.title }}</h3>
+             <p class="poll-metadata">
+              Created by <strong>{{ poll.author }}</strong> at {{ poll.created_at.strftime('%H:%M %Y-%m-%d') }}.
+            </p>
+            <div class="poll-description">
+              {{ poll.description|safe }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div> 
+  </div>
 {% endblock %}
+{% block js_footer %}
+  <script src="{{ url_for('static', filename='jquery.linkable.js') }}"></script>
+
+  <script type="text/javascript">
+    $(function () {
+      $(".linkable").linkable();
+    });
+  </script>
+{% endblock js_footer %}

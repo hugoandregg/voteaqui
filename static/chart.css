@@ -1,0 +1,28 @@
+.row-centered {
+    text-align:center;
+}
+.col-centered {
+    display:inline-block;
+    float:none;
+    /* reset the text-align */
+    text-align:left;
+    /* inline-block space fix */
+    margin-right:-4px;
+}
+
+[class*="col-"] {
+    padding-top:10px;
+    padding-bottom:15px;
+	border:1px solid #7c6a6a;
+	background:#f3f1f1;
+}
+[class*="col-"]:before {
+    display:block;position:relative;
+    content:"RESULTADOS";
+    margin-bottom:8px;
+	font-family:sans-serif;
+	font-size:10px;
+    letter-spacing:1px;
+    color:#000000;
+    text-align:left;
+}

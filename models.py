@@ -50,14 +50,19 @@ class Poll(db.Document):
 	expiration_date = db.DateTimeField()
 	title = db.StringField(required=True, max_length=30)
 	description = db.StringField()
+	enabled = db.BooleanField(default=True)
 	author = db.ReferenceField(User)
 	choices = db.ListField(db.ReferenceField(Choice))
 	comments = db.ListField(db.ReferenceField(Comment))
+	number_votes = db.IntField(default=0)
+
+	def plus_one_vote(self):
+		self.number_votes += 1
 
 	def __unicode__(self):
 		return self.title
 
 	meta = {
 		'indexes': ['-created_at', '-id'],
-		'ordering': ['-created_at']
+		'ordering': ['-number_votes']
 	} 
