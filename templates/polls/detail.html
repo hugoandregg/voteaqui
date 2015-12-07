@@ -17,7 +17,7 @@
 
 {% if poll.author == current_user %} 
 <div class="btn-group" role="group">
-  <a class="btn btn-primary" href="/create/{{ poll.id }}">Adicionar escolha</a><a class="btn btn-danger" href="/delete/{{ poll.id }}">Deletar Votação</a><a href="/disable/{{ poll.id }}" class="btn btn-default">Desativar Votação</a>
+  <a class="btn btn-primary" href="/create/{{ poll.id }}">Adicionar escolha</a><a class="btn btn-danger" href="/delete/{{ poll.id }}">Deletar Votação</a><a href="/edit/{{ poll.id }}" class="btn btn-primary">Editar Votação</a><a href="/disable/{{ poll.id }}" class="btn btn-default">Desativar Votação</a>
 </div>
 {% endif %}
 
@@ -37,6 +37,7 @@
               <h3 class="card-title">{{ choice.name }}</h3>
               <p class="card-text">{{ choice.description }}</p>
               {% if can_vote %}<a class="card-link btn btn-sm btn-success" href="/vote/{{poll.id}}/{{choice.id}}"><i class="glyphicon glyphicon-ok"></i>&nbsp&nbspVotar</a>{% endif %}
+              {% if choice == chosen_choice %}<a class="card-link btn btn-sm btn-danger" href="/remove_vote/{{poll.id}}/{{choice.id}}"><i class="glyphicon glyphicon-remove"></i>&nbsp&nbspDesfazer</a>{% endif %}
             </div>
           </div>
         </div>

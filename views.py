@@ -34,19 +34,22 @@ class DetailView(MethodView):
 		poll = Poll.objects.get_or_404(id=poll_id)
 		form = self.form(request.form)
 		user = User.objects.get(id=current_user.id)
-
+		chosen_choice = None
 		can_vote = True
 		for choice in poll.choices:
 			if choice.users != None:
 				for choice_user in choice.users:
 					if choice_user == user:
 						can_vote = False
+						chosen_choice = choice
+						break
 
 		context = {
 			"poll": poll,
 			"form": form,
 			"user": user,
-			"can_vote": can_vote
+			"can_vote": can_vote,
+			"chosen_choice": chosen_choice
 		}
 
 		return context
@@ -97,6 +100,22 @@ class VoteView(MethodView):
 			choice.save()
 			
 			poll.plus_one_vote()
+			poll.save()
+		return redirect(url_for('polls.detail', poll_id=poll_id))
+
+
+class RemoveVoteView(MethodView):
+	@login_required
+	def get(self, poll_id, choice_id):
+		poll = Poll.objects.get_or_404(id=poll_id)
+		if poll.enabled:
+			choice = Choice.objects.get(id=choice_id)
+			choice.minus_one_vote()
+			user = User.objects.get(id=current_user.id)
+			choice.users.remove(user)
+			choice.save()
+			
+			poll.minus_one_vote()
 			poll.save()
 		return redirect(url_for('polls.detail', poll_id=poll_id))
 
@@ -168,10 +187,7 @@ class PollEditView(MethodView):
 		context = self.get_context(poll_id)
 		form = context.get('form')
 		date = datetime(int(request.form['expiration_date'][:4]), int(request.form['expiration_date'][5:7]), int(request.form['expiration_date'][8:10]), 0, 0, 0)
-		print date
-		print form.errors
 		if form.validate():
-			print "chegou aqui"
 			poll = context.get('poll')
 			form.populate_obj(poll)
 			poll.expiration_date = date
@@ -294,3 +310,4 @@ polls.add_url_rule('/delete/<poll_id>/', view_func=PollDeleteView.as_view('delet
 polls.add_url_rule('/delete_choice/<poll_id>/<choice_id>/', view_func=ChoiceDeleteView.as_view('delete_choice'))
 polls.add_url_rule('/delete/<poll_id>/<comment_id>/', view_func=CommentDeleteView.as_view('delete_comment'))
 polls.add_url_rule('/vote/<poll_id>/<choice_id>/', view_func=VoteView.as_view('vote'))
+polls.add_url_rule('/remove_vote/<poll_id>/<choice_id>/', view_func=RemoveVoteView.as_view('remove_vote'))

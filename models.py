@@ -42,6 +42,9 @@ class Choice(db.Document):
 	def plus_one_vote(self):
 		self.votes += 1
 
+	def minus_one_vote(self):
+		self.votes -= 1
+
 	def __unicode__(self):
 		self.name
 
@@ -59,6 +62,9 @@ class Poll(db.Document):
 
 	def plus_one_vote(self):
 		self.number_votes += 1
+
+	def minus_one_vote(self):
+		self.number_votes -= 1
 
 	def __unicode__(self):
 		return self.title
