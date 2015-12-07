@@ -17,7 +17,7 @@
 
 {% if poll.author == current_user %} 
 <div class="btn-group" role="group">
-  <a class="btn btn-primary" href="/create/{{ poll.id }}">Adicionar escolha</a><a class="btn btn-danger" href="/delete/{{ poll.id }}">Deletar Votação</a><a href="/edit/{{ poll.id }}" class="btn btn-primary">Editar Votação</a><a href="/disable/{{ poll.id }}" class="btn btn-default">Desativar Votação</a>
+  <a class="btn btn-primary" href="/create/{{ poll.id }}">Adicionar escolha</a><a href="/edit/{{ poll.id }}" class="btn btn-primary">Editar Votação</a><a class="btn btn-danger" href="/delete/{{ poll.id }}">Deletar Votação</a><a href="/disable/{{ poll.id }}" class="btn btn-warning">Desativar Votação</a>
 </div>
 {% endif %}
 
