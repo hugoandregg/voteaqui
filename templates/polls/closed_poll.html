@@ -24,21 +24,6 @@
 		</div>
 	</div>
 
-	<hr>
-	<h2>Comentários</h2>
-	{% if poll.comments %}
-	{% for comment in poll.comments %}
-	  <h4>{{ comment.author }}</h4>
-	  <p>{{ comment.body }}{% if comment.author == current_user %} - <a href="/delete/{{poll.id}}/{{comment.id}}">excluir</a>{% endif %}</p>
-	{% endfor %}
-	{% endif %}
-	<hr>
-	<form action="." method="post">
-	{{ forms.render(form) }}
-	<div class="actions">
-	  <input type="submit" class="btn primary" value="Comentar">
-	</div>
-	</form>
 {% endblock %}
 {% block js_footer %}
 	<script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>

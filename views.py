@@ -79,46 +79,10 @@ class DetailView(MethodView):
 
 
 class ClosedPollView(MethodView):
-	form = model_form(Comment, exclude=['author'])
-
-	def get_context(self, poll_id):
-		poll = Poll.objects.get_or_404(id=poll_id)
-		form = self.form(request.form)
-		user = User.objects.get(id=current_user.id)
-
-		context = {
-			"poll": poll,
-			"form": form,
-			"user": user,
-		}
-
-		return context
-
 	@login_required
 	def get(self, poll_id):
-		context = self.get_context(poll_id)
-		return render_template('polls/closed_poll.html', **context)
-
-	@login_required
-	def post(self, poll_id):
-		context = self.get_context(poll_id)
-		form = context.get('form')
-		
-		if form.validate():
-			comment = Comment()
-			form.populate_obj(comment)
-			comment.author = context.get('user')
-			comment.save()
-
-			poll = context.get('poll')
-			poll.comments.append(comment)
-			poll.save()
-
-			user = context.get('user')
-			user.comments.append(comment)
-			user.save()
-			return redirect(url_for('polls.closed', poll_id=poll_id))
-		return render_template('polls/closed_poll.html', **context)
+		poll = Poll.objects.get_or_404(id=poll_id)
+		return render_template('polls/closed_poll.html', poll=poll)
 
 
 class VoteView(MethodView):
@@ -280,10 +244,14 @@ class EnablePollView(MethodView):
 	@login_required
 	def get(self, poll_id):
 		poll = Poll.objects.get_or_404(id=poll_id)
-		poll.enabled = True
-		poll.save()
+		date = datetime.now()
+		if poll.expiration_date > date:
+			poll.enabled = True
+			poll.save()
 
-		return redirect(url_for('polls.list'))
+			return redirect(url_for('polls.list'))
+		else:
+			return redirect(url_for('polls.closed', poll_id=poll_id))
 
 
 class ChoiceDeleteView(MethodView):

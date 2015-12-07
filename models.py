@@ -4,6 +4,7 @@ from voteaqui import db
 
 class Comment(db.Document):
 	body = db.StringField(required=True)
+	created_at = db.DateTimeField(default=datetime.datetime.now, required=True)
 	author = db.ReferenceField('User')
 
 

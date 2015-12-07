@@ -6,9 +6,7 @@
 {% endblock %}
 
 {% block page_header %}
-  <div class="page-header">
-    <h1>{{ poll.title }}</h1>
-  </div>
+  <h3>{{ poll.title }}</h3>
 {% endblock %}
 
 {% block content %}
@@ -18,7 +16,9 @@
   <p>{{ poll.created_at.strftime('%H:%M %Y-%m-%d') }}</p>
 
 {% if poll.author == current_user %} 
-<a class="btn btn-primary" href="/create/{{ poll.id }}">Adicionar escolha</a> | <a class="btn btn-danger" href="/delete/{{ poll.id }}">Deletar Votação</a> | <a href="/disable/{{ poll.id }}" class="btn btn-default">Desativar Votação</a>
+<div class="btn-group" role="group">
+  <a class="btn btn-primary" href="/create/{{ poll.id }}">Adicionar escolha</a><a class="btn btn-danger" href="/delete/{{ poll.id }}">Deletar Votação</a><a href="/disable/{{ poll.id }}" class="btn btn-default">Desativar Votação</a>
+</div>
 {% endif %}
 
   {% if poll.choices %}
@@ -31,35 +31,47 @@
           <div class="card" style="margin-bottom: 20px;">
             <div class="card-header text-center">
               {{ choice.votes }} votos
+              {% if poll.author == current_user %}<a class="card-link btn btn-sm btn-danger" href="/delete_choice/{{poll.id}}/{{choice.id}}"><i class="glyphicon glyphicon-trash"></i></a>{% endif %}
             </div>
             <div class="card-block text-center">
               <h3 class="card-title">{{ choice.name }}</h3>
               <p class="card-text">{{ choice.description }}</p>
-              {% if can_vote %}<a class="card-link" href="/vote/{{poll.id}}/{{choice.id}}">Votar</a>{% endif %}
-              {% if poll.author == current_user %}<a class="card-link" href="/delete_choice/{{poll.id}}/{{choice.id}}">Excluir</a>{% endif %}
+              {% if can_vote %}<a class="card-link btn btn-sm btn-success" href="/vote/{{poll.id}}/{{choice.id}}"><i class="glyphicon glyphicon-ok"></i>&nbsp&nbspVotar</a>{% endif %}
             </div>
           </div>
         </div>
-      </div>
-  	{% endfor %}
-
     </div>
+  	{% endfor %}
+  </div>
   {% endif %}
 
   <hr>
+  <div class="row">
   <h2>Comentários</h2>
   {% if poll.comments %}
     {% for comment in poll.comments %}
-      <h4>{{ comment.author }}</h4>
-      <p>{{ comment.body }}{% if comment.author == current_user %} - <a href="/delete/{{poll.id}}/{{comment.id}}">excluir</a>{% endif %}</p>
-       <!-- <small>on  comment.created_at.strftime('%H:%M %Y-%m-%d') </small></p> -->
+      <div class="col-sm-5">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <strong>{{ comment.author }}</strong> <span class="text-muted">{{ comment.created_at.strftime('%H:%M %Y-%m-%d') }}</span>
+          </div>
+          <div class="panel-body">
+            {{ comment.body }}
+            {% if comment.author == current_user %}<a class="pull-right" href="/delete/{{poll.id}}/{{comment.id}}">excluir</a>{% endif %}
+          </div>
+        </div>
+      </div>
     {% endfor %}
   {% endif %}
+  </div>
   <hr>
-  <form action="." method="post">
-  {{ forms.render(form) }}
-    <div class="actions">
-      <input type="submit" class="btn primary" value="Comentar">
+  <form class="form-inline" role="form" action="." method="post">
+    {{ form.csrf_token }}
+    <div class="form-group">
+      <input class="form-control" name="body" type="text" placeholder="Deixe seu comentário" />
+    </div>
+    <div class="form-group">
+      <input type="submit" class="btn btn-default" />
     </div>
   </form>
 {% endblock %}

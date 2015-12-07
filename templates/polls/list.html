@@ -3,19 +3,20 @@
 {% block content %}
   <div role="tabpanel">
     <ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"><a href="#open" aria-controls="open" role="tab" data-toggle="tab">Open</a></li>
-      <li role="presentation"><a href="#closed" aria-controls="closed" role="tab" data-toggle="tab">Closed</a></li>
+      <li role="presentation" class="active"><a href="#open" aria-controls="open" role="tab" data-toggle="tab">Enquetes Abertas</a></li>
+      <li role="presentation"><a href="#closed" aria-controls="closed" role="tab" data-toggle="tab">Enquetes Fechadas</a></li>
     </ul>
   </div>
   <div class="tab-content" style="padding: 10px;">
     <div role="tabpanel" class="tab-pane active" id="open">
       {% for poll in polls %}
-        <div class="panel panel-default poll-item linkable" style="background-color: #337AB7; color: white;" data-href="{{ url_for('polls.detail', poll_id=poll.id) }}">
+        <div id="openPanel" class="panel panel-default poll-item linkable" data-href="{{ url_for('polls.detail', poll_id=poll.id) }}">
           <div class="panel-body">
             <h3 class="panel-title poll-title">{{ poll.title }}</h3>
              <p class="poll-metadata">
               Created by <strong>{{ poll.author }}</strong> at {{ poll.created_at.strftime('%H:%M %Y-%m-%d') }}.
             </p>
+            <span id="votes" class="badge pull-right">{{ poll.number_votes }} voto(s)</span>
             <div class="poll-description">
               {{ poll.description|safe }}
             </div>
@@ -26,12 +27,13 @@
     </div>
     <div role="tabpanel" class="tab-pane" id="closed">
       {% for poll in closed_polls %}
-        <div class="panel panel-default poll-item linkable" style="background-color: #B6B6B6; color: white;" data-href="{{ url_for('polls.closed', poll_id=poll.id) }}">
+        <div id="closedPanel" class="panel panel-default poll-item linkable" data-href="{{ url_for('polls.closed', poll_id=poll.id) }}">
           <div class="panel-body">
             <h3 class="panel-title poll-title">{{ poll.title }}</h3>
              <p class="poll-metadata">
               Created by <strong>{{ poll.author }}</strong> at {{ poll.created_at.strftime('%H:%M %Y-%m-%d') }}.
             </p>
+            <span id="votes" class="badge pull-right">{{ poll.number_votes }} voto(s)</span>
             <div class="poll-description">
               {{ poll.description|safe }}
             </div>

@@ -10,6 +10,8 @@
 
 	padding-bottom: 5px;
 	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+	background: #337AB7;
+	color: white;
 }
 
 .card-header {
@@ -17,12 +19,19 @@
 	-moz-border-radius: 10px 10px 0px 0px;
 	-webkit-border-radius: 10px 10px 0px 0px;
 	border: 0px solid #000000;
-	padding-bottom: 4px;
-	background-color: #d9d9d9;
+
+	background-color: #286090;
+	height: 40px;
+	text-align: left;
+	padding: 10px;
 }
 
-.card a {
+.card-header i {
+	color: white;
+}
+
+.card-header a {
 	color: #0275d8;
 	cursor: auto;
-	margin: 12px;
+	float: right;
 }
