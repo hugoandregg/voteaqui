@@ -13,6 +13,7 @@
   <p><b>Descrição:</b> {{ poll.description }}<p>
   <p><b>Autor:</b> {{ poll.author.name }}</p>
   <p><b>Data de validade:</b> {{ poll.expiration_date }}</p>
+  <p><b>Tags:</b> {{ poll.print_tags() }}</p>
   <p>{{ poll.created_at.strftime('%H:%M %Y-%m-%d') }}</p>
 
 {% if poll.author == current_user %} 

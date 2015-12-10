@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<div class="row">
+	    <div class="col-lg-4 col-md-offset-4">
+	      <form action="." method="post">
+	        <div class="input-group">
+	          <input type="text" class="form-control" name="tag" placeholder="Buscar por tags...">
+	          <span class="input-group-btn">
+	            <button class="btn btn-default"><i id="search" class="glyphicon glyphicon-search"></i></button>
+	          </span>
+	        </div>
+	      </form>
+	    </div>
+  	</div>
+
+  	{% for poll in polls %}
+        <div id="openPanel" class="panel panel-default poll-item linkable" data-href="{{ url_for('polls.detail', poll_id=poll.id) }}">
+          <div class="panel-body">
+            <h3 class="panel-title poll-title">{{ poll.title }}</h3>
+             <p class="poll-metadata">
+              Created by <strong>{{ poll.author }}</strong> at {{ poll.created_at.strftime('%H:%M %Y-%m-%d') }}.
+            </p>
+            <span id="votes" class="badge pull-right">{{ poll.number_votes }} voto(s)</span>
+            <div class="poll-description">
+              {{ poll.description|safe }}<br />
+              Tags: {{ poll.print_tags() }}
+            </div>
+          </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block js_footer %}
+  <script src="{{ url_for('static', filename='jquery.linkable.js') }}"></script>
+
+  <script type="text/javascript">
+    $(function () {
+      $(".linkable").linkable();
+    });
+  </script>
+{% endblock js_footer %}

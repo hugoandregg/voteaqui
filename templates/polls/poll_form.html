@@ -1,14 +1,36 @@
 {% extends "base.html" %}
 {% import "_forms.html" as forms %}
 
+{% block links %}
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/css/selectize.css" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.1/js/standalone/selectize.js"></script>
+{% endblock %}
+
 {% block content %}
-	<form action="." method="post">
-	{{ forms.render(form) }}
-	<b>Data de validade</b><br />
-	<input type="date" name="expiration_date" />
+	<form action="." method="post" enctype="multipart/form-data">
+		{{ forms.render(form) }}
+		<b>Data de validade</b><br />
+		<input type="date" name="expiration_date"></input><br />
+		<b>Tags</b><br />
+		<input type="text" name="tags" id="input-tags" />
 		<div class="actions" style="margin-top:20px">
-		  <input type="submit" class="btn btn-primary" value="Save">
+		  <input type="submit" class="btn btn-primary" value="Save"></input>
 		  <a class="btn btn-danger" href="{{ url_for("polls.list") }}" class="btn secondary">Cancel</a>
 		</div>
 	</form>
+{% endblock %}
+
+{% block js_footer %}
+	<script type="text/javascript">
+		$('#input-tags').selectize({
+			delimiter: ' ',
+			persist: false,
+			create: function(input) {
+				return {
+					value: input,
+					text: input
+				}
+			}
+		});
+	</script>
 {% endblock %}

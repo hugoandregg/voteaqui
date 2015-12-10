@@ -22,3 +22,16 @@
 	background-color: #B6B6B6; 
 	color: white;
 }
+
+.selectize-dropdown, .selectize-input, .selectize-input {
+	width: 180px !important;
+}
+
+.selectize-input > div.item {
+	background-color: #337AB7 !important;
+	color: white !important;
+}
+
+#search {
+	line-height: 1.5;
+}

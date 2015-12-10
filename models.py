@@ -33,6 +33,7 @@ class User(db.Document):
 	def __unicode__(self):
 		return self.name
 
+
 class Choice(db.Document):
 	name = db.StringField(required=True, max_length=50)
 	description = db.StringField()
@@ -58,6 +59,7 @@ class Poll(db.Document):
 	author = db.ReferenceField(User)
 	choices = db.ListField(db.ReferenceField(Choice))
 	comments = db.ListField(db.ReferenceField(Comment))
+	tags = db.ListField(db.StringField())
 	number_votes = db.IntField(default=0)
 
 	def plus_one_vote(self):
@@ -65,6 +67,9 @@ class Poll(db.Document):
 
 	def minus_one_vote(self):
 		self.number_votes -= 1
+
+	def print_tags(self):
+		return ', '.join(self.tags) + '.'
 
 	def __unicode__(self):
 		return self.title

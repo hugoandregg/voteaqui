@@ -121,7 +121,7 @@ class RemoveVoteView(MethodView):
 
 
 class PollCreateView(MethodView):
-	form = model_form(Poll, exclude=['created_at', 'comments', 'choices', 'author', 'expiration_date', 'enabled', 'number_votes'])
+	form = model_form(Poll, exclude=['created_at', 'comments', 'choices', 'author', 'expiration_date', 'enabled', 'number_votes', 'tags'])
 
 	def get_context(self):
 		poll = Poll()
@@ -144,11 +144,12 @@ class PollCreateView(MethodView):
 		context = self.get_context()
 		form = context.get('form')
 		date = datetime(int(request.form['expiration_date'][:4]), int(request.form['expiration_date'][5:7]), int(request.form['expiration_date'][8:10]), 0, 0, 0)
-
+		print request.form['tags'].split(" ")
 		if form.validate():
 			poll = context.get('poll')
 			form.populate_obj(poll)
 			poll.expiration_date = date
+			poll.tags = request.form['tags'].split(" ")
 			user = User.objects.get(id=current_user.id)
 			poll.author = user
 			poll.save()
@@ -160,8 +161,26 @@ class PollCreateView(MethodView):
 		return render_template('polls/poll_form.html', **context)
 
 
+class SearchPollView(MethodView):
+	@login_required
+	def get(self):
+		return render_template('polls/search.html')
+
+	@login_required
+	def post(self):
+		tag = request.form['tag']
+		polls = []
+		for poll in Poll.objects:
+			for poll_tag in poll.tags:
+				if tag in poll_tag:
+					polls.append(poll)
+					break
+
+		return render_template('polls/search.html', polls=polls) 
+
+
 class PollEditView(MethodView):
-	form = model_form(Poll, exclude=['created_at', 'comments', 'choices', 'author', 'expiration_date', 'enabled', 'number_votes'])
+	form = model_form(Poll, exclude=['created_at', 'comments', 'choices', 'author', 'expiration_date', 'enabled', 'number_votes', 'tags'])
 
 	def get_context(self, poll_id):
 		poll = Poll.objects.get_or_404(id=poll_id)
@@ -302,6 +321,7 @@ polls.add_url_rule('/', view_func=ListView.as_view('list'))
 polls.add_url_rule('/<poll_id>/', view_func=DetailView.as_view('detail'))
 polls.add_url_rule('/create/', view_func=PollCreateView.as_view('create'))
 polls.add_url_rule('/edit/<poll_id>/', view_func=PollEditView.as_view('edit'))
+polls.add_url_rule('/search/', view_func=SearchPollView.as_view('search'))
 polls.add_url_rule('/create/<poll_id>/', view_func=ChoiceCreateView.as_view('create_choice'))
 polls.add_url_rule('/disable/<poll_id>', view_func=DisablePollView.as_view('disable'))
 polls.add_url_rule('/enable/<poll_id>', view_func=EnablePollView.as_view('enable'))

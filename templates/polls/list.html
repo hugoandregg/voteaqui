@@ -1,6 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
+  <div class="row">
+    <div class="col-lg-4 col-md-offset-4">
+      <form action="/search/" method="post">
+        <div class="input-group">
+          <input type="text" class="form-control" name="tag" placeholder="Buscar por tags..."></input>
+          <span class="input-group-btn">
+            <button class="btn btn-default"><i id="search" class="glyphicon glyphicon-search"></i></button>
+          </span>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
   <div role="tabpanel">
     <ul class="nav nav-tabs" role="tablist">
       <li role="presentation" class="active"><a href="#open" aria-controls="open" role="tab" data-toggle="tab">Enquetes Abertas</a></li>
@@ -18,7 +31,8 @@
             </p>
             <span id="votes" class="badge pull-right">{{ poll.number_votes }} voto(s)</span>
             <div class="poll-description">
-              {{ poll.description|safe }}
+              {{ poll.description|safe }}<br />
+              Tags: {{ poll.print_tags() }}
             </div>
           </div>
         </div>
@@ -35,12 +49,14 @@
             </p>
             <span id="votes" class="badge pull-right">{{ poll.number_votes }} voto(s)</span>
             <div class="poll-description">
-              {{ poll.description|safe }}
+              {{ poll.description|safe }}<br />
+              Tags: {{ poll.print_tags() }}
             </div>
           </div>
         </div>
       {% endfor %}
     </div> 
+  </div>
   </div>
 {% endblock %}
 {% block js_footer %}
